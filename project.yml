@@ -1,0 +1,66 @@
+name: DrivrPremiumDrivingTracker
+options:
+  bundleIdPrefix: com.superapp
+  developmentLanguage: en
+
+settings:
+  base:
+    PRODUCT_NAME: DRIVR
+    SWIFT_VERSION: 6.0
+    MARKETING_VERSION: 1.0
+    CURRENT_PROJECT_VERSION: 1
+    SUPPORTED_PLATFORMS: iphoneos iphonesimulator
+    TARGETED_DEVICE_FAMILY: '1'
+    SUPPORTS_MACCATALYST: NO
+    ALWAYS_SEARCH_USER_PATHS: NO
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  configs:
+    Release:
+      SWIFT_OPTIMIZATION_LEVEL: '-O'
+      SWIFT_COMPILATION_MODE: wholemodule
+      ENABLE_NS_ASSERTIONS: NO
+
+targets:
+  DrivrPremiumDrivingTracker:
+    type: application
+    platform: iOS
+    deploymentTarget: '17.0'
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.superapp.drivrpremiumdrivingtracker3pa7k
+    sources:
+      - path: DrivrPremiumDrivingTracker
+    info:
+      path: DrivrPremiumDrivingTracker/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: $(DEVELOPMENT_LANGUAGE)
+        CFBundleDisplayName: $(PRODUCT_NAME)
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: 6.0
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleIconName: AppIcon
+        ITSAppUsesNonExemptEncryption: false
+        LSRequiresIPhoneOS: true
+        UIApplicationSupportsIndirectInputEvents: true
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiredDeviceCapabilities: [arm64]
+        NSLocationWhenInUseUsageDescription: DRIVR uses your location to record speed, distance, and route while you drive.
+        NSLocationAlwaysAndWhenInUseUsageDescription: Allow background location so an active drive can continue when DRIVR is not on screen.
+        NSMotionUsageDescription: DRIVR uses motion data during a drive to identify braking, acceleration, and cornering events.
+        UIBackgroundModes: [location]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+
+schemes:
+  DrivrPremiumDrivingTracker:
+    build:
+      targets:
+        DrivrPremiumDrivingTracker: all
+    run:
+      config: Debug
+    archive:
+      config: Release
