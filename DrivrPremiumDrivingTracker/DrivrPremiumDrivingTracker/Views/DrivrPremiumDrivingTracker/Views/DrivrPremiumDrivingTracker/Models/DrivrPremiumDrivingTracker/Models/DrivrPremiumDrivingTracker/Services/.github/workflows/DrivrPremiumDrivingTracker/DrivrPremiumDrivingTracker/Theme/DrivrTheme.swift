@@ -1,10 +1,19 @@
-import SwiftUI
+iimport SwiftUI
 
 public struct DrivrTheme {
     public static let secondaryText = Color.gray
     public static let primaryText = Color.white
     public static let accent = Color.blue
     public static let background = Color.black
+    public static let lime = Color.green
+}
+
+public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
+    case metric = "Metric"
+    case imperial = "Imperial"
+    
+    public var id: String { self.rawValue }
+    public var title: String { self.rawValue }
 }
 
 public struct PrimaryButtonStyle: ButtonStyle {
