@@ -25,6 +25,7 @@ public class AppState: ObservableObject {
 
 public class VehicleSetupViewModel: ObservableObject {
     @Published public var units: UnitSystem = .metric
+    @Published public var errorMessage: String? = nil
     
     public init(vehicle: Any? = nil, units: UnitSystem = .metric, state: Any? = nil) {
         self.units = units
