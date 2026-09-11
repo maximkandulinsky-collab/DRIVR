@@ -16,10 +16,10 @@ public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
     public var title: String { self.rawValue }
 }
 
-public struct PrimaryButtonStyle: PrimitiveButtonStyle {
+public struct PrimaryButtonStyle: ButtonStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
-        Button(configuration)
+        configuration.label
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
@@ -32,5 +32,9 @@ extension View {
         self.padding()
             .background(Color.gray.opacity(0.2))
             .cornerRadius(12)
+    }
+
+    public func drivrBackground() -> some View {
+        self.background(Color.black.ignoresSafeArea())
     }
 }
