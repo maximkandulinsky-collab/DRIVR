@@ -16,6 +16,13 @@ public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
     
     public var id: String { self.rawValue }
     public var title: String { self.rawValue }
+    
+    public var detail: String {
+        switch self {
+        case .metric: return "Kilometers, Liters"
+        case .imperial: return "Miles, Gallons"
+        }
+    }
 }
 
 public class AppState: ObservableObject {
@@ -27,9 +34,17 @@ public class VehicleSetupViewModel: ObservableObject {
     @Published public var units: UnitSystem = .metric
     @Published public var errorMessage: String? = nil
     @Published public var canSave: Bool = true
+    @Published public var make: String = ""
+    @Published public var editingVehicle: Any? = nil
     
     public init(vehicle: Any? = nil, units: UnitSystem = .metric, state: Any? = nil) {
         self.units = units
+        self.editingVehicle = vehicle
+    }
+    
+    public func save(into state: Any? = nil, onFinished: (() -> Void)? = nil) -> Bool {
+        onFinished?()
+        return true
     }
 }
 
