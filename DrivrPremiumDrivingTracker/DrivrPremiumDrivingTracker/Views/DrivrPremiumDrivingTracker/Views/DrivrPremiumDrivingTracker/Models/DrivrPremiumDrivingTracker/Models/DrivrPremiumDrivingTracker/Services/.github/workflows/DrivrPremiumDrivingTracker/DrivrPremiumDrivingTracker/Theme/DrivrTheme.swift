@@ -1,4 +1,4 @@
-iimport SwiftUI
+import SwiftUI
 
 public struct DrivrTheme {
     public static let secondaryText = Color.gray
@@ -16,10 +16,10 @@ public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
     public var title: String { self.rawValue }
 }
 
-public struct PrimaryButtonStyle: ButtonStyle {
+public struct PrimaryButtonStyle: PrimitiveButtonStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        Button(configuration)
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
