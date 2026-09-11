@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 public struct DrivrTheme {
     public static let secondaryText = Color.gray
@@ -14,6 +15,14 @@ public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
     
     public var id: String { self.rawValue }
     public var title: String { self.rawValue }
+}
+
+public class VehicleSetupViewModel: ObservableObject {
+    @Published public var units: UnitSystem = .metric
+    
+    public init(vehicle: Any? = nil, units: UnitSystem = .metric, state: Any? = nil) {
+        self.units = units
+    }
 }
 
 public struct PrimaryButtonStyle: ButtonStyle {
