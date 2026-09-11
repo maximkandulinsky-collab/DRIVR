@@ -1,13 +1,13 @@
 import SwiftUI
 import Combine
 
-// MARK: - Missing Types / Structs
-public struct RoutePoint: Identifiable, Hashable {
+// MARK: - Missing Types & Models
+public struct RoutePoint: Identifiable, Hashable, Sendable {
     public var id = UUID()
     public init() {}
 }
 
-public struct DrivingEvent: Identifiable, Hashable {
+public struct DrivingEvent: Identifiable, Hashable, Sendable {
     public var id = UUID()
     public static func decode(_ data: Any?) -> [DrivingEvent] { [] }
     public init() {}
@@ -15,18 +15,40 @@ public struct DrivingEvent: Identifiable, Hashable {
 
 public struct RouteDecodeResult {
     public var points: [RoutePoint] = []
+    public var isMalformed: Bool = false
     public init() {}
+}
+
+public struct VersionedEventPayload {
+    public static func decode(_ data: Any?) -> [DrivingEvent] { [] }
+}
+
+public struct VersionedRoutePayload {
+    public static func decodeResult(_ data: Any?) -> RouteDecodeResult { RouteDecodeResult() }
 }
 
 public enum GPSQuality: String {
     case good = "Good"
+    case fair = "Fair"
     case poor = "Poor"
     public var rawValue: String { "Good" }
 }
 
 public class GPSTracker: ObservableObject {
     @Published public var gpsQuality: GPSQuality = .good
+    @Published public var route: [RoutePoint] = []
+    @Published public var displayedSpeedMetersPerSecond: Double = 0.0
+    @Published public var distanceMeters: Double = 0.0
+    @Published public var topSpeedMetersPerSecond: Double = 0.0
+    @Published public var events: [DrivingEvent] = []
     public init() {}
+}
+
+public class VehicleItem: ObservableObject {
+    @Published public var nickname: String = ""
+    public init(nickname: String = "") {
+        self.nickname = nickname
+    }
 }
 
 // MARK: - Theme & Layout
@@ -60,7 +82,11 @@ public class AppState: ObservableObject {
     @Published public var isDriveActive: Bool = false
     @Published public var units: UnitSystem = .metric
     @Published public var tracker: GPSTracker = GPSTracker()
+    @Published public var activeVehicle: VehicleItem? = VehicleItem()
+    @Published public var analysisStatus: String = "Ready"
+    
     public init() {}
+    public func closeTrip() {}
 }
 
 // MARK: - View Model
@@ -76,6 +102,7 @@ public class VehicleSetupViewModel: ObservableObject {
     @Published public var vin: String = ""
     @Published public var licensePlate: String = ""
     @Published public var engine: String = ""
+    @Published public var nickname: String = ""
     @Published public var notes: String = ""
     @Published public var imageData: Data? = nil
     @Published public var isProcessingPhoto: Bool = false
@@ -96,16 +123,64 @@ public class VehicleSetupViewModel: ObservableObject {
     public func deleteVehicle(from state: Any? = nil) {}
 }
 
-// MARK: - Formatters & Styles
+// MARK: - Formatters & Views
 public struct DriveFormatter {
     public static func distance(meters: Double, units: UnitSystem) -> (joined: String, value: String, unit: String) {
         return ("0 km", "0", "km")
+    }
+    public static func speed(metersPerSecond: Double, units: UnitSystem) -> (joined: String, value: String, unit: String) {
+        return ("0 km/h", "0", "km/h")
     }
     public static func date(_ date: Date) -> String {
         return "Today"
     }
     public static func duration(_ seconds: Double) -> String {
         return "0 min"
+    }
+}
+
+public struct MetricTile: View {
+    let title: String
+    let value: String
+    var unit: String = ""
+    var tint: Color = .white
+    
+    public init(title: String, value: String, unit: String = "", tint: Color = .white) {
+        self.title = title
+        self.value = value
+        self.unit = unit
+        self.tint = tint
+    }
+    
+    public var body: some View {
+        VStack {
+            Text(title).font(.caption).foregroundColor(.gray)
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Text(value).font(.title2).bold().foregroundColor(tint)
+                if !unit.isEmpty {
+                    Text(unit).font(.caption).foregroundColor(.gray)
+                }
+            }
+        }
+    }
+}
+
+public struct RouteMapView: View {
+    let points: [RoutePoint]
+    let isLive: Bool
+    let height: CGFloat
+    
+    public init(points: [RoutePoint], isLive: Bool = false, height: CGFloat = 200) {
+        self.points = points
+        self.isLive = isLive
+        self.height = height
+    }
+    
+    public var body: some View {
+        Rectangle()
+            .fill(Color.gray.opacity(0.3))
+            .frame(height: height)
+            .cornerRadius(12)
     }
 }
 
