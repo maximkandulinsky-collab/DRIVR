@@ -135,3 +135,4 @@ private struct RecentTripRow: View {
         }
         .drivrCard()
     }
+    }

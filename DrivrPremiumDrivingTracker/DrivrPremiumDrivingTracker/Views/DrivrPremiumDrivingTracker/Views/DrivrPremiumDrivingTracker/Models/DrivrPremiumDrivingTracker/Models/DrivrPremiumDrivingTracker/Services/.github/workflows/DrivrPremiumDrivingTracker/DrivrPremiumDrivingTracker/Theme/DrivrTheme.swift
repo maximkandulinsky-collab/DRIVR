@@ -7,6 +7,7 @@ public struct DrivrTheme {
     public static let accent = Color.blue
     public static let background = Color.black
     public static let lime = Color.green
+    public static let raceBlue = Color.blue
 }
 
 public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
@@ -17,11 +18,28 @@ public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
     public var title: String { self.rawValue }
 }
 
+public class AppState: ObservableObject {
+    @Published public var isDriveActive: Bool = false
+    public init() {}
+}
+
 public class VehicleSetupViewModel: ObservableObject {
     @Published public var units: UnitSystem = .metric
     
     public init(vehicle: Any? = nil, units: UnitSystem = .metric, state: Any? = nil) {
         self.units = units
+    }
+}
+
+public struct DriveFormatter {
+    public static func distance(meters: Double, units: UnitSystem) -> (joined: String, value: String, unit: String) {
+        return ("0 km", "0", "km")
+    }
+    public static func date(_ date: Date) -> String {
+        return "Today"
+    }
+    public static func duration(_ seconds: Double) -> String {
+        return "0 min"
     }
 }
 
