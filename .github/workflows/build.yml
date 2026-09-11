@@ -23,8 +23,10 @@ jobs:
 
       - name: Build iOS App for Simulator
         run: |
+          SCHEME=$(xcodebuild -list -project DrivrPremiumDrivingTracker.xcodeproj | awk '/Schemes:/{flag=1;next} /^\s*$/{flag=0} flag' | head -n 1 | xargs)
+          echo "Building scheme: $SCHEME"
           xcodebuild -project DrivrPremiumDrivingTracker.xcodeproj \
-                     -scheme DRIVR \
+                     -scheme "$SCHEME" \
                      -sdk iphonesimulator \
                      -configuration Release \
                      -derivedDataPath build \
@@ -32,8 +34,9 @@ jobs:
 
       - name: Zip .app Bundle for Appetize
         run: |
-          cd build/Build/Products/Release-iphonesimulator
-          zip -r ../../../drivr-appetize.zip DRIVR.app
+          APP_PATH=$(find build/Build/Products/Release-iphonesimulator -maxdepth 1 -name "*.app" | head -n 1)
+          cd $(dirname "$APP_PATH")
+          zip -r ../../../drivr-appetize.zip $(basename "$APP_PATH")
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
