@@ -1,0 +1,39 @@
+name: Build iOS App for Appetize
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Build iOS App for Simulator
+        run: |
+          xcodebuild -project DrivrPremiumDrivingTracker.xcodeproj \
+                     -scheme DRIVR \
+                     -sdk iphonesimulator \
+                     -configuration Release \
+                     -derivedDataPath build \
+                     ONLY_ACTIVE_ARCH=NO
+
+      - name: Zip .app Bundle for Appetize
+        run: |
+          cd build/Build/Products/Release-iphonesimulator
+          zip -r ../../../drivr-appetize.zip DRIVR.app
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: drivr-appetize-build
+          path: drivr-appetize.zip
