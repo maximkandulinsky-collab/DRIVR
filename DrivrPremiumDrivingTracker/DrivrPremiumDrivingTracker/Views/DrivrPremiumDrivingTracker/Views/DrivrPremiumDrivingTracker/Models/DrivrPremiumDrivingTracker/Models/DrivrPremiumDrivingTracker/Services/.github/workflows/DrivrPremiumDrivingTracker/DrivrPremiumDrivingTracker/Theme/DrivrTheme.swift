@@ -35,6 +35,8 @@ public class VehicleSetupViewModel: ObservableObject {
     @Published public var errorMessage: String? = nil
     @Published public var canSave: Bool = true
     @Published public var make: String = ""
+    @Published public var model: String = ""
+    @Published public var isProcessingPhoto: Bool = false
     @Published public var editingVehicle: Any? = nil
     
     public init(vehicle: Any? = nil, units: UnitSystem = .metric, state: Any? = nil) {
