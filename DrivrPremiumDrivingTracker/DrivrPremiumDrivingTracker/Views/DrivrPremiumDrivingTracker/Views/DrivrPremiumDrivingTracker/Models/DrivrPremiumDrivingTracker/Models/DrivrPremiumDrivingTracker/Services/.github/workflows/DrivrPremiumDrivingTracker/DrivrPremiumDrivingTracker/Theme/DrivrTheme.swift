@@ -8,6 +8,7 @@ public struct DrivrTheme {
     public static let background = Color.black
     public static let lime = Color.green
     public static let raceBlue = Color.blue
+    public static let elevated = Color.gray.opacity(0.15)
 }
 
 public enum UnitSystem: String, CaseIterable, Identifiable, Hashable {
@@ -36,6 +37,12 @@ public class VehicleSetupViewModel: ObservableObject {
     @Published public var canSave: Bool = true
     @Published public var make: String = ""
     @Published public var model: String = ""
+    @Published public var year: String = ""
+    @Published public var trim: String = ""
+    @Published public var vin: String = ""
+    @Published public var licensePlate: String = ""
+    @Published public var notes: String = ""
+    @Published public var imageData: Data? = nil
     @Published public var isProcessingPhoto: Bool = false
     @Published public var editingVehicle: Any? = nil
     
@@ -48,6 +55,10 @@ public class VehicleSetupViewModel: ObservableObject {
         onFinished?()
         return true
     }
+    
+    public func loadPhoto(_ item: Any?) async {}
+    public func processPhoto(_ image: Any? = nil) {}
+    public func deleteVehicle(from state: Any? = nil) {}
 }
 
 public struct DriveFormatter {
